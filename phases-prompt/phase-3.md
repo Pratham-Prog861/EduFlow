@@ -1,0 +1,1 @@
+Implement course content management with sections and lectures. Allow instructors to upload videos using Cloudinary and organize lectures under sections.

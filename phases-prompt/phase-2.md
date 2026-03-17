@@ -1,0 +1,1 @@
+Build a course creation feature where instructors can create a course with title, description, and thumbnail. Store data using Convex and display courses in the instructor dashboard.

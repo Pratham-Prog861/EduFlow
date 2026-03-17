@@ -1,0 +1,1 @@
+Improve UI/UX by adding loading skeletons, toast notifications, and proper empty and error states using ShadCN components.

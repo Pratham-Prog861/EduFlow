@@ -1,0 +1,1 @@
+Build a course player page with a video player, lecture navigation sidebar, and progress tracking. Allow users to mark lectures as completed and store progress in Convex.

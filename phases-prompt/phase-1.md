@@ -1,0 +1,1 @@
+Create a protected dashboard layout using Next.js App Router with Clerk authentication. Add a responsive navbar and sidebar using ShadCN UI. Implement role-based UI (student and instructor).
