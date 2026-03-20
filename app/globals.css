@@ -178,6 +178,22 @@
   .bg-glass {
     @apply bg-white/10 backdrop-blur-md border border-white/20;
   }
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(56px) scale(0.985);
+    filter: blur(6px);
+    transition:
+      opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 900ms cubic-bezier(0.22, 1, 0.36, 1),
+      filter 900ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform, filter;
+  }
+
+  .reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
 }
 
 @keyframes float {
@@ -218,3 +234,6 @@
     width: 30%;
   }
 }
+
+
+
