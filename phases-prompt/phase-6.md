@@ -1,1 +1,0 @@
-Integrate Gemini API to generate a course summary based on lecture content. Display the AI-generated summary inside a UI card using ShadCN components.

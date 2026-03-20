@@ -1,1 +1,0 @@
-Create a course browsing and enrollment system where students can view courses, enroll for free, and access enrolled courses from their dashboard.
