@@ -45,6 +45,7 @@ next-env.d.ts
 .agents/
 .agent/
 
-phases-prompt/
+phases-prompt
 product.md
 requirement.md
+phases-prompt/
