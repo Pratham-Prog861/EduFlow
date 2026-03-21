@@ -10,9 +10,6 @@ import {
   CheckCircle2,
   Menu,
   X,
-  PlayCircle,
-  Clock,
-  ArrowRight,
   Lock,
   ChevronLeft,
   ChevronRight,
@@ -90,7 +87,7 @@ export default function CoursePlayerPage() {
              <Skeleton className="h-8 w-64 rounded-full" />
              <Skeleton className="h-10 w-32 rounded-full" />
           </header>
-          <div className="p-12 space-y-12 max-w-[1200px] mx-auto w-full">
+          <div className="p-12 space-y-12 max-w-300 mx-auto w-full">
             <Skeleton className="aspect-video w-full rounded-[2.5rem]" />
             <div className="space-y-4">
               <Skeleton className="h-12 w-3/4 rounded-full" />
@@ -121,7 +118,7 @@ export default function CoursePlayerPage() {
       {/* Sidebar - Desktop */}
       <div className={cn(
         "bg-slate-50 dark:bg-slate-900/50 border-r border-slate-100 dark:border-slate-800 transition-all duration-500 overflow-y-auto z-30",
-        sidebarOpen ? "w-[360px]" : "w-0 p-0 overflow-hidden"
+        sidebarOpen ? "w-90" : "w-0 p-0 overflow-hidden"
       )}>
         <CourseSidebar 
             course={course} 
@@ -167,7 +164,7 @@ export default function CoursePlayerPage() {
             </div>
         </header>
 
-        <main className="flex-1 p-4 md:p-8 lg:p-12 max-w-[1200px] mx-auto w-full space-y-12 pb-24">
+        <main className="flex-1 p-4 md:p-8 lg:p-12 max-w-300 mx-auto w-full space-y-12 pb-24">
             {/* Video Container */}
             <div className="aspect-video bg-black rounded-[2.5rem] overflow-hidden shadow-2xl shadow-indigo-500/10 border-8 border-slate-50 dark:border-slate-900 group relative">
                 {currentLecture.videoUrl ? (
@@ -196,7 +193,7 @@ export default function CoursePlayerPage() {
                     </div>
                     <h1 className="text-4xl font-black text-slate-900 dark:text-white leading-tight">{currentLecture.title}</h1>
                     <p className="text-lg text-slate-600 dark:text-slate-400 font-medium leading-relaxed max-w-3xl">
-                        {currentLecture.description || "In this lesson, we dive deep into the core concepts covered in this module. Take your time to understand each segment."}
+                        In this lesson, we dive deep into the core concepts covered in this module. Take your time to understand each segment.
                     </p>
                 </div>
             </div>
@@ -230,6 +227,7 @@ export default function CoursePlayerPage() {
     </div>
   );
 }
+
 
 
 
