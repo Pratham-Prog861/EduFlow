@@ -372,7 +372,7 @@ export default function LandingPage() {
             Frequently asked questions
           </h2>
 
-          <Accordion className="mt-6" defaultValue={faqs[0].id}>
+          <Accordion className="mt-6" defaultValue={[faqs[0].id]}>
             {faqs.map((faq) => (
               <AccordionItem key={faq.id} value={faq.id} className="border-slate-200/70 dark:border-slate-800">
                 <AccordionTrigger className="text-base font-semibold text-slate-900 dark:text-white">
@@ -532,6 +532,7 @@ function Workflow({ title, steps }: { title: string; steps: string[] }) {
     </article>
   );
 }
+
 
 
 
