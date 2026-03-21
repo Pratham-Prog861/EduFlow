@@ -3,53 +3,81 @@ import { action } from "./_generated/server";
 import { api } from "./_generated/api";
 import { GoogleGenAI } from "@google/genai";
 
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (typeof error === "string") return error;
+  try {
+    return JSON.stringify(error);
+  } catch {
+    return "Unknown error";
+  }
+}
+
 export const generateCourseSummary = action({
-  args: { 
-    courseId: v.id("courses"), 
-    courseTitle: v.string(), 
+  args: {
+    courseId: v.id("courses"),
+    courseTitle: v.string(),
     courseDescription: v.string(),
-    lectures: v.array(v.string()) 
+    lectures: v.array(v.string()),
   },
   handler: async (ctx, args) => {
     const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) throw new Error("GEMINI_API_KEY is not set");
-
-    // Correctly initialize with options object
-    const genAI = new GoogleGenAI({ apiKey });
-    
-    const prompt = `
-      You are an expert educational consultant. Generate a concise, engaging, and professional summary for a course platform.
-      
-      COURSE TITLE: ${args.courseTitle}
-      DESCRIPTION: ${args.courseDescription}
-      LECTURE TOPICS: ${args.lectures.join(", ")}
-      
-      Generate a 3-4 sentence summary that highlights the value proposition and key learning outcomes of this course. 
-      Keep the tone encouraging, premium, and professional. 
-      Do not use any markdown formatting in the output, just plain text.
-    `;
-
-    try {
-      const result = await genAI.models.generateContent({
-        model: "gemini-2.0-flash",
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-      });
-
-      // text is a getter in the @google/genai SDK
-      const summary = result.text?.trim() || "";
-
-      if (!summary) throw new Error("AI returned an empty response.");
-
-      // Save the summary back to the database
-      await ctx.runMutation(api.courses.updateCourseSummary, {
-        courseId: args.courseId,
-        summary: summary,
-      });
-
-      return summary;
-    } catch (error: any) {
-      console.error("Gemini Error:", error);
-      throw new Error("Failed to generate summary with Gemini 2.0 Flash.");
+    if (!apiKey) {
+      throw new Error("GEMINI_API_KEY is not set");
     }
+
+    const genAI = new GoogleGenAI({ apiKey });
+
+    const prompt = [
+      "You are an expert educational consultant.",
+      "Generate a concise, engaging, professional course summary.",
+      "",
+      `COURSE TITLE: ${args.courseTitle}`,
+      `DESCRIPTION: ${args.courseDescription}`,
+      `LECTURE TOPICS: ${args.lectures.join(", ")}`,
+      "",
+      "Output requirements:",
+      "- 3 to 4 sentences",
+      "- Highlight value proposition and outcomes",
+      "- Premium and encouraging tone",
+      "- Plain text only, no markdown",
+    ].join("\n");
+
+    const models = ["gemini-2.5-flash"];
+    const modelErrors: string[] = [];
+
+    let summary = "";
+
+    for (const model of models) {
+      try {
+        const result = await genAI.models.generateContent({
+          model,
+          contents: prompt,
+        });
+
+        const candidate = result.text?.trim() ?? "";
+        if (candidate.length > 0) {
+          summary = candidate;
+          break;
+        }
+
+        modelErrors.push(`${model}: empty response`);
+      } catch (error: unknown) {
+        modelErrors.push(`${model}: ${getErrorMessage(error)}`);
+      }
+    }
+
+    if (!summary) {
+      throw new Error(
+        `Failed to generate summary with Gemini. Attempts: ${modelErrors.join(" | ")}`,
+      );
+    }
+
+    await ctx.runMutation(api.courses.updateCourseSummary, {
+      courseId: args.courseId,
+      summary,
+    });
+
+    return summary;
   },
 });
