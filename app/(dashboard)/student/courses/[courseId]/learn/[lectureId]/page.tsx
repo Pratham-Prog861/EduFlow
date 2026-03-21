@@ -102,12 +102,19 @@ export default function CoursePlayerPage() {
 
   const onToggleComplete = async () => {
     try {
-      await toggleProgress({
+      const result = await toggleProgress({
         courseId,
         lectureId,
         isCompleted: !isCompleted,
       });
+
       toast.success(isCompleted ? "Marked as incomplete" : "Lecture completed!");
+
+      if (!isCompleted && result?.certificateIssued) {
+        toast.success("Certificate unlocked!", {
+          description: "Your course certificate is ready in the Certificates tab.",
+        });
+      }
     } catch {
       toast.error("Failed to update status");
     }
@@ -227,6 +234,7 @@ export default function CoursePlayerPage() {
     </div>
   );
 }
+
 
 
 

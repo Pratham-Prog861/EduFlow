@@ -1,4 +1,4 @@
-import { mutation } from "./_generated/server";
+import { mutation, MutationCtx } from "./_generated/server";
 import type { Id } from "./_generated/dataModel";
 
 const TABLE_CLEAR_ORDER = [
@@ -12,13 +12,13 @@ const TABLE_CLEAR_ORDER = [
 
 type SeedTable = (typeof TABLE_CLEAR_ORDER)[number];
 
-async function clearTable(ctx: any, table: SeedTable) {
+async function clearTable(ctx: MutationCtx, table: SeedTable) {
   const docs = await ctx.db.query(table).collect();
-  await Promise.all(docs.map((doc: { _id: string }) => ctx.db.delete(doc._id)));
+  await Promise.all(docs.map((doc) => ctx.db.delete(doc._id)));
   return docs.length;
 }
 
-async function clearAllTables(ctx: any) {
+async function clearAllTables(ctx: MutationCtx) {
   const deleted: Record<SeedTable, number> = {
     progress: 0,
     enrollments: 0,
@@ -406,3 +406,4 @@ export const seedAll = mutation({
     };
   },
 });
+

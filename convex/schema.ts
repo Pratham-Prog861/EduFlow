@@ -51,4 +51,33 @@ export default defineSchema({
   })
     .index("by_user_lecture", ["userId", "lectureId"])
     .index("by_user_course", ["userId", "courseId"]),
+
+  certificates: defineTable({
+    userId: v.id("users"),
+    courseId: v.id("courses"),
+    instructorId: v.id("users"),
+    studentName: v.string(),
+    courseName: v.string(),
+    instructorName: v.string(),
+    completedAt: v.number(),
+    certificateCode: v.string(),
+    issuedAt: v.number(),
+    status: v.union(v.literal("active")),
+  })
+    .index("by_user", ["userId"])
+    .index("by_user_course", ["userId", "courseId"])
+    .index("by_code", ["certificateCode"])
+    .index("by_user_issuedAt", ["userId", "issuedAt"]),
+
+  notifications: defineTable({
+    userId: v.id("users"),
+    type: v.union(v.literal("certificate_issued")),
+    title: v.string(),
+    message: v.string(),
+    entityId: v.optional(v.id("certificates")),
+    isRead: v.boolean(),
+    createdAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_user_createdAt", ["userId", "createdAt"]),
 });

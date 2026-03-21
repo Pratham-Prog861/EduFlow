@@ -9,9 +9,11 @@
  */
 
 import type * as ai from "../ai.js";
+import type * as certificates from "../certificates.js";
 import type * as courses from "../courses.js";
 import type * as enrollments from "../enrollments.js";
 import type * as lectures from "../lectures.js";
+import type * as notifications from "../notifications.js";
 import type * as progress from "../progress.js";
 import type * as sections from "../sections.js";
 import type * as seed from "../seed.js";
@@ -25,9 +27,11 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   ai: typeof ai;
+  certificates: typeof certificates;
   courses: typeof courses;
   enrollments: typeof enrollments;
   lectures: typeof lectures;
+  notifications: typeof notifications;
   progress: typeof progress;
   sections: typeof sections;
   seed: typeof seed;

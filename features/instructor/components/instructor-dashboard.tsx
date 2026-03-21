@@ -1,5 +1,7 @@
 "use client";
 
+import type { ReactNode } from "react";
+
 import { useInstructorCourses } from "../hooks/use-instructor-courses";
 import { 
   Users, 
@@ -115,7 +117,7 @@ export function InstructorDashboard() {
   );
 }
 
-function StatsCard({ icon, label, value, subText, trend }: { icon: any, label: string, value: string, subText: string, trend?: string }) {
+function StatsCard({ icon, label, value, subText, trend }: { icon: ReactNode; label: string; value: string; subText: string; trend?: string }) {
   return (
     <div className="bg-white dark:bg-slate-950 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-900 group shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden relative">
       <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 blur-[40px] rounded-full group-hover:bg-indigo-500/10 transition-colors -translate-y-1/2 translate-x-1/2" />
@@ -136,7 +138,7 @@ function StatsCard({ icon, label, value, subText, trend }: { icon: any, label: s
   );
 }
 
-function DashboardCourseCard({ course }: { course: any }) {
+function DashboardCourseCard({ course }: { course: { _id: string; title: string; thumbnailUrl?: string } }) {
   return (
     <Link href={`/dashboard/instructor/courses/${course._id}`}>
        <div className="bg-white dark:bg-slate-950 rounded-[2.5rem] overflow-hidden group border border-slate-100 dark:border-slate-900 shadow-sm hover:shadow-2xl transition-all duration-700">
@@ -171,4 +173,5 @@ function DashboardCourseCard({ course }: { course: any }) {
     </Link>
   );
 }
+
 

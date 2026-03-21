@@ -13,6 +13,7 @@ export const getEnrollmentsByUserId = query({
 });
 
 export const getEnrolledCourses = query({
+  args: {},
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) return [];
@@ -220,5 +221,6 @@ export const getInstructorStudents = query({
     return students;
   },
 });
+
 
 

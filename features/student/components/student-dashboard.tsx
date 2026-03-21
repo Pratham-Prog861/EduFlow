@@ -1,5 +1,7 @@
 "use client";
 
+import type { ReactNode } from "react";
+
 import { useEnrolledCourses } from "../hooks/use-enrolled-courses";
 import { 
   Trophy, 
@@ -123,7 +125,7 @@ export function StudentDashboard() {
              </div>
              <h2 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.85]">ELEVATE YOUR <br /> SYNTHESIS</h2>
              <p className="text-lg lg:text-xl font-medium text-white/80 leading-relaxed">
-               Our AI Knowledge Engine predicts a high suitability for "Advanced System Dynamics" based on your current trajectory. Ready to accelerate?
+               Our AI Knowledge Engine predicts a high suitability for &quot;Advanced System Dynamics&quot; based on your current trajectory. Ready to accelerate?
              </p>
              <div className="flex flex-wrap items-center justify-center xl:justify-start gap-4">
                <Button className="rounded-full h-16 px-10 bg-white text-indigo-600 font-black uppercase tracking-widest text-xs hover:bg-slate-50 transition-all shadow-2xl">
@@ -158,7 +160,7 @@ export function StudentDashboard() {
   );
 }
 
-function SummaryCard({ icon, label, value, subText, trend }: { icon: any, label: string, value: string, subText: string, trend?: string }) {
+function SummaryCard({ icon, label, value, subText, trend }: { icon: ReactNode; label: string; value: string; subText: string; trend?: string }) {
   return (
     <div className="bg-white dark:bg-slate-950 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-900 group shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden relative">
       <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 blur-[40px] rounded-full group-hover:bg-indigo-500/10 transition-colors -translate-y-1/2 translate-x-1/2" />
@@ -178,3 +180,4 @@ function SummaryCard({ icon, label, value, subText, trend }: { icon: any, label:
     </div>
   );
 }
+

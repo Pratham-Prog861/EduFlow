@@ -90,8 +90,8 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
   useEffect(() => {
     const existing = document.querySelector('script[data-cloudinary-widget="true"]');
     if (existing) {
-      initWidget();
-      return;
+      const timer = window.setTimeout(() => initWidget(), 0);
+      return () => window.clearTimeout(timer);
     }
 
     const script = document.createElement("script");
@@ -176,3 +176,4 @@ export function ThumbnailUpload({ value, onChange }: ThumbnailUploadProps) {
     </div>
   );
 }
+

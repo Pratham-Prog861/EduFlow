@@ -19,9 +19,10 @@ export async function createCourseAction(title: string, description: string, thu
       thumbnailUrl,
     });
     return { success: true, courseId };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("Course Creation Action Failure:", err);
-    return { success: false, error: err?.message || "Internal transmission failure." };
+    const message = err instanceof Error ? err.message : "Internal transmission failure.";
+    return { success: false, error: message };
   }
 }
 
@@ -31,8 +32,9 @@ export async function deleteCourseAction(courseId: Id<"courses">) {
     // For now we assume a recursive deletion is handled at the DB layer or a dedicated function.
     await convex.mutation(api.courses.updateCourseSummary, { courseId, summary: "" }); // placeholder
     return { success: true };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error("Course Deletion Error:", err);
     return { success: false, error: "Unable to decommission this learning path." };
   }
 }
+

@@ -4,7 +4,7 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Card, CardContent } from "@/components/ui/card";
 import { Doc } from "@/convex/_generated/dataModel";
-import { GraduationCap, BookOpen, TrendingUp, Clock, ArrowRight, CheckCircle2 } from "lucide-react";
+import { GraduationCap, BookOpen, TrendingUp, ArrowRight, CheckCircle2, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { EnrolledCourseCard } from "@/components/course/course-card";
@@ -12,11 +12,12 @@ import { EnrolledCourseSkeleton } from "@/components/common/skeletons";
 
 export default function StudentDashboard() {
   const enrolledCourses = useQuery(api.enrollments.getEnrolledCourses);
+  const certificates = useQuery(api.certificates.listMine);
 
   const stats = [
     { label: "Courses Enrolled", value: enrolledCourses?.length || 0, icon: BookOpen },
     { label: "Completed Lessons", value: "0", icon: CheckCircle2 },
-    { label: "Study Hours", value: "0", icon: Clock },
+    { label: "Certificates", value: certificates?.length || 0, icon: Award },
     { label: "Active Courses", value: enrolledCourses?.filter(Boolean).length || 0, icon: TrendingUp },
   ];
 
@@ -29,12 +30,20 @@ export default function StudentDashboard() {
           <p className="mt-2 text-slate-600 dark:text-slate-300">Jump back into your enrolled courses and track progress.</p>
         </div>
 
-        <Link href="/dashboard/student/courses">
-          <Button className="h-10 rounded-full bg-slate-900 px-5 text-xs font-semibold uppercase tracking-[0.14em] text-white hover:bg-slate-800 dark:bg-white dark:text-slate-950">
-            Explore Courses
-            <ArrowRight className="ml-1.5 h-4 w-4" />
-          </Button>
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link href="/dashboard/student/certificates">
+            <Button variant="outline" className="h-10 rounded-full px-5 text-xs font-semibold uppercase tracking-[0.14em]">
+              Certificates
+              <ArrowRight className="ml-1.5 h-4 w-4" />
+            </Button>
+          </Link>
+          <Link href="/dashboard/student/courses">
+            <Button className="h-10 rounded-full bg-slate-900 px-5 text-xs font-semibold uppercase tracking-[0.14em] text-white hover:bg-slate-800 dark:bg-white dark:text-slate-950">
+              Explore Courses
+              <ArrowRight className="ml-1.5 h-4 w-4" />
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -91,3 +100,4 @@ export default function StudentDashboard() {
     </div>
   );
 }
+

@@ -49,7 +49,11 @@ export function VideoUpload({ lectureId, initialUrl, onSuccess }: VideoUploadPro
   const widgetRef = useRef<CloudinaryWidget | null>(null);
 
   useEffect(() => {
-    setPreviewUrl(initialUrl ?? null);
+    const timer = window.setTimeout(() => {
+      setPreviewUrl(initialUrl ?? null);
+    }, 0);
+
+    return () => window.clearTimeout(timer);
   }, [initialUrl]);
 
   useEffect(() => {
@@ -183,3 +187,4 @@ export function VideoUpload({ lectureId, initialUrl, onSuccess }: VideoUploadPro
     </div>
   );
 }
+

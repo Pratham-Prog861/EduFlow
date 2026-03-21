@@ -12,6 +12,7 @@ import {
   PlusCircle,
   Library,
   Users,
+  Award,
 } from "lucide-react";
 
 interface SidebarProps extends HTMLAttributes<HTMLDivElement> {
@@ -24,6 +25,7 @@ export function Sidebar({ role, className }: SidebarProps) {
   const studentRoutes = [
     { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard/student" },
     { label: "My Courses", icon: Library, href: "/dashboard/student/courses" },
+    { label: "Certificates", icon: Award, href: "/dashboard/student/certificates" },
     { label: "Browse Courses", icon: BookOpen, href: "/courses" },
   ];
 

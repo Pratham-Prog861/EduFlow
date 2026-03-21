@@ -31,9 +31,10 @@ export function useAISummary(courseId: Id<"courses">) {
       } else {
         throw new Error(result.error);
       }
-    } catch (err: any) {
-      setError(err?.message || "SYNTHESIS MISALIGNMENT");
-      toast.error(`SYSTEM ERROR: ${err?.message || "Unknown synthesis failure."}`);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "SYNTHESIS MISALIGNMENT";
+      setError(message);
+      toast.error(`SYSTEM ERROR: ${message || "Unknown synthesis failure."}`);
     } finally {
       setIsSynthesizing(false);
     }
@@ -46,3 +47,4 @@ export function useAISummary(courseId: Id<"courses">) {
     isReady: !isSynthesizing && !error
   };
 }
+
