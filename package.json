@@ -7,6 +7,8 @@
     "dev:frontend": "next dev",
     "dev:backend": "convex dev",
     "predev": "convex dev --until-success && convex dashboard",
+    "seed:All": "convex run seed:seedAll && convex run courses:getPublishedCourses",
+    "seed:ClearAll": "convex run seed:clearAll",
     "build": "next build",
     "start": "next start",
     "lint": "eslint ."

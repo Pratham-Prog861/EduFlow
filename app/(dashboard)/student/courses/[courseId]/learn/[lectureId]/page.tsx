@@ -3,6 +3,7 @@
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useParams, useRouter } from "next/navigation";
+import { useMemo } from "react";
 import { Id } from "@/convex/_generated/dataModel";
 import {
   ArrowLeft,
@@ -40,6 +41,35 @@ export default function CoursePlayerPage() {
   const toggleProgress = useMutation(api.progress.toggleProgress);
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  const orderedLectureIds = useMemo(() => {
+    if (!lecturesByCourse || !sections) return [];
+
+    const sectionOrder = new Map(
+      sections.map((section) => [String(section._id), section.order]),
+    );
+
+    return [...lecturesByCourse]
+      .sort((a, b) => {
+        const sectionA = sectionOrder.get(String(a.sectionId)) ?? 0;
+        const sectionB = sectionOrder.get(String(b.sectionId)) ?? 0;
+        if (sectionA !== sectionB) return sectionA - sectionB;
+
+        if (a.order !== b.order) return a.order - b.order;
+        return a._creationTime - b._creationTime;
+      })
+      .map((lecture) => lecture._id);
+  }, [lecturesByCourse, sections]);
+
+  const currentLectureIndex = orderedLectureIds.findIndex(
+    (id) => String(id) === String(lectureId),
+  );
+  const previousLectureId =
+    currentLectureIndex > 0 ? orderedLectureIds[currentLectureIndex - 1] : null;
+  const nextLectureId =
+    currentLectureIndex >= 0 && currentLectureIndex < orderedLectureIds.length - 1
+      ? orderedLectureIds[currentLectureIndex + 1]
+      : null;
 
   if (!course || !currentLecture || !sections) {
     return (
@@ -171,12 +201,27 @@ export default function CoursePlayerPage() {
                 </div>
             </div>
 
-            {/* Bottom Nav */}
+                        {/* Bottom Nav */}
             <div className="border-t border-slate-100 dark:border-slate-800 pt-12 flex items-center justify-between">
-                <Button variant="outline" className="rounded-full border-2 border-slate-100 dark:border-slate-800 px-8 h-12 font-bold group">
+                <Button
+                    variant="outline"
+                    className="rounded-full border-2 border-slate-100 dark:border-slate-800 px-8 h-12 font-bold group"
+                    disabled={!previousLectureId}
+                    onClick={() => {
+                      if (!previousLectureId) return;
+                      router.push(`/dashboard/student/courses/${courseId}/learn/${previousLectureId}`);
+                    }}
+                >
                     <ChevronLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" /> Previous Lesson
                 </Button>
-                <Button className="rounded-full bg-slate-900 hover:bg-slate-800 px-8 h-12 font-bold group">
+                <Button
+                    className="rounded-full bg-slate-900 hover:bg-slate-800 px-8 h-12 font-bold group"
+                    disabled={!nextLectureId}
+                    onClick={() => {
+                      if (!nextLectureId) return;
+                      router.push(`/dashboard/student/courses/${courseId}/learn/${nextLectureId}`);
+                    }}
+                >
                     Next Lesson <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
             </div>
@@ -185,6 +230,10 @@ export default function CoursePlayerPage() {
     </div>
   );
 }
+
+
+
+
 
 
 

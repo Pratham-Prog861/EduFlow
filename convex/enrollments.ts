@@ -71,6 +71,44 @@ export const getEnrollmentCountByCourse = query({
     return enrollments.length;
   },
 });
+export const getEnrollmentCountsByCourses = query({
+  args: { courseIds: v.array(v.id("courses")) },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return {} as Record<string, number>;
+
+    const instructor = await ctx.db
+      .query("users")
+      .withIndex("by_externalId", (q) => q.eq("externalId", identity.subject))
+      .unique();
+
+    if (!instructor || instructor.role !== "instructor") {
+      return {} as Record<string, number>;
+    }
+
+    const instructorCourses = await ctx.db
+      .query("courses")
+      .withIndex("by_instructorId", (q) => q.eq("instructorId", instructor._id))
+      .collect();
+
+    const ownedCourseIds = new Set(instructorCourses.map((course) => String(course._id)));
+    const scopedCourseIds = args.courseIds.filter((courseId) =>
+      ownedCourseIds.has(String(courseId)),
+    );
+
+    const counts: Record<string, number> = {};
+    for (const courseId of scopedCourseIds) {
+      const enrollments = await ctx.db
+        .query("enrollments")
+        .withIndex("by_course", (q) => q.eq("courseId", courseId))
+        .collect();
+      counts[String(courseId)] = enrollments.length;
+    }
+
+    return counts;
+  },
+});
+
 export const enroll = mutation({
   args: { courseId: v.id("courses") },
   handler: async (ctx, args) => {
@@ -182,4 +220,5 @@ export const getInstructorStudents = query({
     return students;
   },
 });
+
 
